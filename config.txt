@@ -1,0 +1,73 @@
+# ---------------------------------------------------------------------------
+# CityscapeAutomation configuration
+# ---------------------------------------------------------------------------
+#
+# Format: one "key = value" per line. Blank lines and lines starting with '#'
+# are ignored. Every key is optional -- an absent key keeps the built-in
+# default shown below, and the program says so on startup.
+#
+# A line with no '=' is malformed and makes the program ignore this file
+# entirely rather than apply half of it.
+#
+# Pass this file with:  python3 main.py --cities cities.txt --config config.txt
+# ---------------------------------------------------------------------------
+
+# --- output ----------------------------------------------------------------
+
+# Root of the generated tree. Holds cache/ (shared, persists between runs) and
+# cities/ (one directory per resolved city).
+output_dir = ./cityscape_data
+
+# Sent on every HTTP request. census.gov and Geofabrik both throttle anonymous
+# bulk traffic, so identifying the program and a contact address is the polite
+# thing to do -- and the thing that keeps a long run from being cut off.
+user_agent = cityscape-automation/1.0 (stojansz@miamioh.edu)
+
+# --- data sources ----------------------------------------------------------
+
+# Base URLs. Change these only to point at a mirror or a local test server.
+census = https://www2.census.gov
+geofabrik = https://download.geofabrik.de/north-america/us
+
+# --- vintages --------------------------------------------------------------
+#
+# These four must be vintages the Census actually published, or the download
+# is a 404. Check https://www2.census.gov/geo/tiger/ before changing them.
+
+# TIGER/Line vintage: the PLACE (city boundary) and PUMA20 shapefiles.
+tiger_year = 2025
+
+# Gazetteer vintage: the national place index cities are resolved against.
+gaz_year = 2024
+
+# ACS PUMS vintage: the person and housing microdata.
+pums_year = 2023
+
+# PUMS span. Only "5-Year" and "1-Year" exist; anything else is rejected and
+# the default is kept. 1-Year covers only areas above 65,000 population.
+pums_span = 5-Year
+
+# --- concurrency -----------------------------------------------------------
+#
+# The two thread pools are sized independently because they are bound by
+# different resources.
+
+# Producers download one state's bulk sources each (about 1-2 GB per state).
+# They are bound by the remote server, not by this machine. Four parallel
+# state downloads already hide essentially all of the latency; going much
+# wider mostly annoys census.gov.
+producer_threads = 4
+
+# Consumers build one city each, driving osmium and ogr2ogr. These are CPU-
+# and disk-heavy, so more consumers than the machine has cores only makes them
+# contend for the same disk.
+consumer_threads = 4
+
+# --- download retries ------------------------------------------------------
+
+# Attempts before a URL is given up on. Each retry resumes from wherever the
+# previous attempt stopped, so a large extract is never re-fetched from zero.
+max_retry = 5
+
+# Seconds to wait between those attempts.
+retry_delay_seconds = 5
