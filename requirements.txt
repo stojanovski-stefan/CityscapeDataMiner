@@ -1,0 +1,2 @@
+# HTTP with streaming responses and Range-header resume.
+requests>=2.28
