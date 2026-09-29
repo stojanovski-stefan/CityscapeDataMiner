@@ -67,6 +67,9 @@ logger = get_logger(__name__)
 # existing layer instead of replacing it.
 SHAPEFILE_SIDECARS = (".shp", ".dbf", ".shx", ".prj", ".cpg")
 
+# CITYSCAPE expects every geometry it is handed to be in WGS84.  TIGER ships
+# NAD83 (EPSG:4269), so every layer written below is reprojected explicitly.
+WGS84 = "EPSG:4326"
 
 class CityConsumer:
     """Builds one city's deliverables out of its state's cached sources.
@@ -157,7 +160,7 @@ class CityConsumer:
 
         if not self.fetcher.run_command(
             [
-                "ogr2ogr", "-f", "ESRI Shapefile",
+                "ogr2ogr", "-t_srs", WGS84, "-f", "ESRI Shapefile",
                 str(boundary), str(place_shapefile), "-where", where,
             ]
         ):
@@ -166,7 +169,7 @@ class CityConsumer:
 
         if not self.fetcher.run_command(
             [
-                "ogr2ogr", "-f", "GeoJSON",
+                "ogr2ogr", "-t_srs", WGS84, "-f", "GeoJSON",
                 str(geojson), str(place_shapefile), "-where", where,
             ]
         ):
@@ -272,7 +275,10 @@ class CityConsumer:
         # away here.
         self._remove_shapefile(puma_shapefile)
         if not self.fetcher.run_command(
-            ["ogr2ogr", "-f", "ESRI Shapefile", str(puma_shapefile), str(puma_source)]
+            [
+                "ogr2ogr", "-t_srs", WGS84, "-f", "ESRI Shapefile",
+                str(puma_shapefile), str(puma_source),
+            ]
         ):
             logger.error("ogr2ogr failed for PUMA %s", city.fips)
             return "", "", False
