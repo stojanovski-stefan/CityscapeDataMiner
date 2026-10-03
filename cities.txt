@@ -5,19 +5,39 @@
 # Ambiguous entries are reported with their candidate GEOIDs and skipped,
 # never guessed.
 
-Columbus, OH
-Cleveland, OH
-Oxford, OH
-Cincinnati, OH
-Dayton, OH
-San Francisco, CA
-# the the city part of NYC is the legal designator
+# Top 30 US cities by population
+# the "city"" part of NYC is the legal designator
 New York, NY
-Philadelphia, PA
 Los Angeles, CA
 Chicago, IL
-Washington, DC
-Boston, MA
-Seattle, WA
+Houston, TX
+Phoenix, AZ
+Philadelphia, PA
+San Antonio, TX
+San Diego, CA
+Dallas, TX
+Fort Worth, TX
+Jacksonville, FL
 Austin, TX
+San Jose, CA
+Charlotte, NC
+Columbus, OH
+# Indianapolis city (balance), IN
+1836003
+San Francisco, CA
+Seattle, WA
 Denver, CO
+# Nashville-Davidson metropolitan government (balance), TN
+4752006
+Oklahoma City, OK
+Washington, DC
+El Paso, TX
+Las Vegas, NV
+Boston, MA
+Detroit, MI
+# Louisville/Jefferson County metro government (balance), KY
+# ("Louisville, KY" would match the separate, much smaller Louisville city)
+2148006
+Portland, OR
+Memphis, TN
+Baltimore, MD
