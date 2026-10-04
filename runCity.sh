@@ -29,8 +29,9 @@ CITY="$(basename "$CITY_DIR")"
 
 mkdir -p "$MODEL_DIR"
 
-# --pop-gis is deliberately absent: CityscapeDataMiner does not produce a
-# population raster, as modelgen.args notes in every city directory.
+# CityscapeDataMiner does not produce a population raster, as 
+# modelgen.args notes in every city directory. Models generated 
+# without pop-gis will not include population rings.
 "$MODELGEN" \
     --shape "$CITY_DIR/boundary.shp" \
     --dbf "$CITY_DIR/boundary.dbf" \
@@ -45,4 +46,5 @@ mkdir -p "$MODEL_DIR"
     --puma-id-col-dbf PUMACE20 \
     --puma-id-col-pums PUMA \
     --pums-h-cols SERIALNO \
+    --pop-gis /fs/ess/PMIU0110/CityscapeDataMiner/cityscape_data/lspop2011/w001001.adf \
     > "$MODEL_DIR/${CITY}_bld_info.txt"
