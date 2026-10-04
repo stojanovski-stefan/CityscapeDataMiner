@@ -13,6 +13,9 @@ them.
 ## Quick start
 
 ```shell
+# for pitzer
+module load miniconda3/25.11.1-py312
+
 # external tools (GDAL and osmium are not pip-installable)
 conda create -y -p $HOME/envs/osm --override-channels -c conda-forge osmium-tool gdal
 conda activate $HOME/envs/osm
